@@ -121,13 +121,13 @@ library SafeMath {
   }
 }
 
-// CYW: The main logic of the code??
+// CYW: The main logic of the code ?? 
 contract BNBKingdom is Ownable {
 
 // CYW: After declear this, you can use the `SafeMath` function by just `a.add(b)` but not `SafeMath.add(a, b);`.
     using SafeMath for uint256;
 
-// CYW: Creating some variable with value??
+// CYW: Creating some variable with value ?? 
     /* base parameters */
     uint256 public EGGS_TO_HIRE_1MINERS = 864000;
     uint256 public REFERRAL = 120;
@@ -186,7 +186,7 @@ contract BNBKingdom is Ownable {
 // CYW: Create key-value data structures for the `User`.
     mapping(address => User) public users;
 
-// CYW: Initializes the state variables, reverted if the requirement is not meet??
+// CYW: Initializes the state variables, reverted if the requirement is not meet ?? 
     constructor(address payable _dev1, address payable _dev2) {
 		require(!isContract(_dev1) && !isContract(_dev2));
         // owner = msg.sender;
@@ -228,7 +228,7 @@ contract BNBKingdom is Ownable {
         blacklisted = Blacklisted[Wallet];
     }
 
-// CYW: A function that need to check the current user is eligible to compound their rewards under certain conditions when the `contractStarted` is true??
+// CYW: A function that need to check the current user is eligible to compound their rewards under certain conditions when the `contractStarted` is true ?? 
     function CompoundRewards(bool isCompound) public {
         User storage user = users[msg.sender];
         require(contractStarted, "Contract not yet Started.");
@@ -260,7 +260,7 @@ contract BNBKingdom is Ownable {
     }
 
 // CYW: This function is selling lands(assets?) within the contract, 
-//      with certain tax implications depending on the user's daily compound bonus and blacklist status??
+//      with certain tax implications depending on the user's daily compound bonus and blacklist status ?? 
     function SellLands() public{
         require(contractStarted, "Contract not yet Started.");
 
@@ -300,7 +300,7 @@ contract BNBKingdom is Ownable {
 
      
 // CYW: This function is appears to be used for users to buy lands(assets?) in the contract,
-//      with provisions for referrals and various calculations related to rewards and deposits??
+//      with provisions for referrals and various calculations related to rewards and deposits ?? 
     /* transfer amount of BNB */
     function BuyLands(address ref) public payable{
         require(contractStarted, "Contract not yet Started.");
@@ -350,7 +350,7 @@ contract BNBKingdom is Ownable {
     	}
     }
 
-// CYW: This Solidity code creates a function that lets users send BNB to the contract. The contract can receive BNB but doesn't do anything with it??
+// CYW: This Solidity code creates a function that lets users send BNB to the contract. The contract can receive BNB but doesn't do anything with it ?? 
     //fund contract with BNB before launch.
     function fundContract() external payable {}
 
@@ -407,7 +407,7 @@ contract BNBKingdom is Ownable {
         return calculateEggSell(userEggs);
     }
 
-// CYW: Return the related data(Trade value?) after done some calculations??
+// CYW: Return the related data(Trade value?) after done some calculations ?? 
     //  Supply and demand balance algorithm 
     function calculateTrade(uint256 rt,uint256 rs, uint256 bs) public view returns(uint256){
     // (PSN * bs)/(PSNH + ((PSN * rs + PSNH * rt) / rt)); PSN / PSNH == 1/2
@@ -424,23 +424,23 @@ contract BNBKingdom is Ownable {
                                         rt)));
     }
 
-// CYW: Get related data(trade value?) from `calculateTrade` by given different parameter?
+// CYW: Get related data(trade value?) from `calculateTrade` by given different parameter.
     function calculateEggSell(uint256 eggs) public view returns(uint256){
         return calculateTrade(eggs, marketEggs, getBalance());
     }
 
-// CYW: Get related data(trade value?) from `calculateTrade` by given different parameter?
+// CYW: Get related data(trade value?) from `calculateTrade` by given different parameter.
     function calculateEggBuy(uint256 eth,uint256 contractBalance) public view returns(uint256){
         return calculateTrade(eth, contractBalance, marketEggs);
     }
 
 // CYW: Get related data(trade value?) from `calculateEggBuy`, 
-//      and in this function also passing the related data to `calculateTrade` to do more customization calculation?
+//      and in this function also passing the related data to `calculateTrade` to do more customization calculation.
     function calculateEggBuySimple(uint256 eth) public view returns(uint256){
         return calculateEggBuy(eth, getBalance());
     }
 
-// CYW: Pass the data one by one into different function parameter to calculate and return value(trade value?) and the net worth of the day?
+// CYW: Pass the data one by one into different function parameter to calculate and return value(trade value?) and the net worth of the day ?? 
     /* How many lands per day user will receive based on BNB deposit */
     function getEggsYield(uint256 amount) public view returns(uint256,uint256) {
         uint256 eggsAmount = calculateEggBuy(amount , getBalance().add(amount).sub(amount));
@@ -451,7 +451,7 @@ contract BNBKingdom is Ownable {
         return(miners, earningsPerDay);
     }
 
-// CYW: Get related data(trade value?) from `calculateTrade` by given different parameter?
+// CYW: Get related data(trade value?) from `calculateTrade` by given different parameter ?? 
     function calculateEggSellForYield(uint256 eggs,uint256 amount) public view returns(uint256){
         return calculateTrade(eggs,marketEggs, getBalance().add(amount));
     }
@@ -467,12 +467,12 @@ contract BNBKingdom is Ownable {
         return users[msg.sender].miners;
     }
 
-// CYW: Return the ??? value of sender?
+// CYW: Return the ??? value of sender ?? 
     function getMyEggs() public view returns(uint256){
         return users[msg.sender].claimedEggs.add(getEggsSinceLastHatch(msg.sender));
     }
 
-// CYW: Return the ??? value after some calculations by giving the target address?
+// CYW: Return the ??? value after some calculations by giving the target address ?? 
     function getEggsSinceLastHatch(address adr) public view returns(uint256){
         uint256 secondsSinceLastHatch = block.timestamp.sub(users[adr].lastHatch);
                             /* get min time. */
@@ -598,7 +598,7 @@ contract BNBKingdom is Ownable {
         COMPOUND_FOR_NO_TAX_WITHDRAWAL = value;
     }
 
-// CYW: Only `owner` can transfer the balance to their address?
+// CYW: Only `owner` can transfer the balance to their address ?? 
     function withDraw () onlyOwner public{
         payable(msg.sender).transfer(address(this).balance);
     }
